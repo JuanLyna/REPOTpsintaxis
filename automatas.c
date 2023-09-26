@@ -55,7 +55,7 @@ int verificarPalabraOctal(char* palabra){
 	int verificaPalabra = 0;
 	for(int i=0; i<palabra.size; i++){
 		char caracterActual = palabra[i];
-		estadoActual = estadoANumCol(matrizOctal[estadoActual][caracterActual]);
+		estadoActual = estadoLetraAEstadoANum(matrizOctal[estadoActual][caracterActual]);
 	}
 	if(estadoActual == ESTADO_ACEPTACION_OCTAL){
 		verificaPalabra = 1;
@@ -69,7 +69,7 @@ int verificarPalabraDecimal(char* palabra){
 	int verificaPalabra = 0;
 	for(int i=0; i<palabra.size; i++){
 		char caracterActual = palabra[i];
-		estadoActual = estadoANumCol(matrizDecimal[estadoActual][caracterActual]);
+		estadoActual = estadoLetraAEstadoANum(matrizDecimal[estadoActual][caracterActual]);
 	}
 	if(estadoActual == ESTADO_ACEPTACION_DECIMAL){
 		verificaPalabra = 1;
@@ -83,7 +83,7 @@ int verificarPalabraHexadecimal(char* palabra){
 	int verificaPalabra = 0;
 	for(int i=0; i<palabra.size; i++){
 		char caracterActual = palabra[i];
-		estadoActual = estadoANumCol(matrizHexadecimal[estadoActual][caracterActual]);
+		estadoActual = estadoLetraAEstadoANum(matrizHexadecimal[estadoActual][caracterActual]);
 	}
 	if(estadoActual == ESTADO_ACEPTACION_HEXADECIMAL){
 		verificaPalabra = 1;
@@ -92,7 +92,7 @@ int verificarPalabraHexadecimal(char* palabra){
 	return verificaPalabra;
 }
 
-int estadoANumCol(char estado){
+int estadoLetraAEstadoANum(char estado){
 	int numCol = -1;
 	switch(estado){
 		case 'A':
