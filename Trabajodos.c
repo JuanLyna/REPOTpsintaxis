@@ -21,12 +21,13 @@ int revisarHexa(char *cadena)
       int count  = 0 ; 
     for(int i = 0 ; cadena[i] ; i++)
     {
-        if(cadena[i] == 'A' && cadena[i] == 'B'  && cadena[i] == 'C' && cadena[i] == 'D' && cadena[i] == 'E' && cadena[i] == 'F'  &&  !(isdigit(cadena[i]))) // si alguno da true es que es un hexa 
+        if(cadena[i] != 'A' && cadena[i] != 'B'  && cadena[i] != 'C' && cadena[i] != 'D' && cadena[i] != 'E' && cadena[i] != 'F'  &&  isdigit(cadena[i])!=0) // si alguno da true es que es un hexa 
     {
        count ++ ;  
     }
     }
     printf("%s" , "rh") ; 
+	fflush(stdout);
    return count  ; 
 }
 
@@ -36,12 +37,13 @@ int revisarOctal(char *cadena)
     
    for (int i = 0; cadena[i]; i++)
    {
-     if(cadena[i] == '0'&&cadena[i] == '1'&&cadena[i] == '2'&&cadena[i] == '3'&&cadena[i] == '4'&&cadena[i] == '5'&&cadena[i] == '6'&&cadena[i] == '7') // si alguno da true es que es un hexa 
+     if(cadena[i] != '0'&&cadena[i] != '1'&&cadena[i] != '2'&&cadena[i] != '3'&&cadena[i] != '4'&&cadena[i] != '5'&&cadena[i] != '6'&&cadena[i] != '7') // si alguno da true es que es un hexa 
     {
        count ++ ;  
     }
    }
     printf("%s" , "ro") ; 
+	fflush(stdout);
    return count ; 
 }
 int revisarDecimal(char *cadena) 
@@ -49,12 +51,13 @@ int revisarDecimal(char *cadena)
   int count = 0; 
   for (int i = 0;cadena[i]; i++)
   {
-    if((isdigit(cadena[i])) && cadena[i] == '-'&&cadena[i] == '+')
+    if(isdigit(cadena[i])!=0 && cadena[i] != '-'&&cadena[i] != '+')
     {
       count  ++ ; 
     }
   }
    printf("%s" , "rd") ; 
+   fflush(stdout);
   return count  ;
 }
 int estadoLetraAEstadoANum(char estado) ; 
@@ -74,7 +77,10 @@ int distinguirConstante(char* palabra){
 	else{
 		tipoAutomata = AUTOMATA_DECIMAL;
 	}
-	 printf("%s" , "dc") ; 
+	 printf("primera letra es  %c \n" , palabra[0]) ; 
+	  printf("segunda letra es %c \n" , palabra[1]) ;
+	   printf("tipo automata es %d \n " , tipoAutomata) ;
+	 fflush(stdout);
 	return tipoAutomata;
 }
 
@@ -82,20 +88,25 @@ int distinguirConstante(char* palabra){
 int verificarPalabra(char* palabra)
 {
 	int palabraCorrecta = -1;
-	 printf("%s" , "vp") ; 
+	 printf("%s \n" , "vp") ; 
+	 fflush(stdout);
 	switch (distinguirConstante(palabra))
 	{
 		case AUTOMATA_OCTAL:
-			printf("Los errores lexicos en octal han sido %d" , revisarOctal(palabra));
+			printf("Los errores lexicos en octal han sido %d \n" , revisarOctal(palabra));
+			
+			fflush(stdout);
 			palabraCorrecta = verificarPalabraOctal(palabra);
 			
 			break;
 		case AUTOMATA_DECIMAL:
-			printf("Los errores lexicos en decimal han sido %d" , revisarDecimal(palabra));
+			printf("Los errores lexicos en decimal han sido %d \n" , revisarDecimal(palabra));
+			fflush(stdout);
 			palabraCorrecta = verificarPalabraDecimal(palabra);
 			break;
 		case AUTOMATA_HEXADECIMAL:
-			printf("Los errores lexicos en Hexadecimal han sido %d" , revisarHexa(palabra));
+			printf("Los errores lexicos en Hexadecimal han sido %d \n" , revisarHexa(palabra));
+			fflush(stdout);
 			palabraCorrecta = verificarPalabraHexadecimal(palabra);
 			break;
 		default:
@@ -113,7 +124,8 @@ int verificarPalabraOctal(char* palabra){
 		{3,2} , 
 		{3,3}
 	};
-	 printf("%s" , "vo") ; 
+	 printf("%s \n" , "vo") ; 
+	 fflush(stdout);
 	for(int i=0; i<palabra[i]; i++){
 		char caracterActual = palabra[i];
 		estadoActual = estadoLetraAEstadoANum(matrizOctal[estadoActual][caracterActual]);
@@ -136,7 +148,8 @@ int verificarPalabraDecimal(char* palabra){
 		{3,3,3,2} , 
 		{3,3,3,3}
 	};
-	 printf("%s" , "rd") ; 
+	 printf("%s \n" , "rd") ; 
+	 fflush(stdout);
 	for(int i=0; i<palabra[i]; i++){
 		char caracterActual = palabra[i];
 		estadoActual = estadoLetraAEstadoANum(matrizDecimal[estadoActual][caracterActual]);
@@ -159,7 +172,8 @@ int verificarPalabraHexadecimal(char* palabra){
 		{4,4,3} , 
 		{4,4,4}
 	};
-	 printf("%s" , "vhex") ; 
+	 printf("%s \n" , "vhex") ; 
+	 fflush(stdout);
 	for(int i=0; i<palabra[i]; i++){
 		char caracterActual = palabra[i];
 		estadoActual = estadoLetraAEstadoANum(matrizHexadecimal[estadoActual][caracterActual]);
@@ -205,35 +219,28 @@ int main()
 {
    char cadena[100] ;  
   
-   char *cadenaUnida = ""; 
+   char cadenaUnida [102]; 
    int constante = 0 ;  
-   int c = 0 ; 
-   int erroresLexicos = 0 ; 
+  
     printf("Ingrese una cadena: ");
-	
+	fflush(stdout);
     scanf( " %s",&cadena) ; 
-	 printf("Ingrese una cadena: ");
-    for (int i = 0; i < cadena[i]; i++) //cadena[i] se usa como condición ya que cuando apunte a un lugar de la cadena q esté vacía , este fallará 
-     {
-      
-       printf("%d" , i) ; 
-      if(cadena[i]=='$' ) 
-        {
-          verificarPalabra(cadenaUnida) ;          
-        } else  {
-			   char p[2] ; 
-			   p[0] = cadena[i] ; 
-			   p[1] = '\0' ;
-			   strcat(cadenaUnida,p) ; 
- 		}
-
-        
-          
-
-       
-       
-     } 
-     
+	char *grupoPalabra =   strtok(cadena,"$") ; 
+	
+    
+	while (grupoPalabra!=NULL)
+	{	
+		printf("%s \n", grupoPalabra);
+		 printf("verificar palabra ");
+		verificarPalabra(grupoPalabra) ; 
+ 	
+		grupoPalabra = strtok(NULL , "$") ; 
+		 
+	}
+	
+	
+	
+	
     
     
 
