@@ -5,10 +5,12 @@
 #define AUTOMATA_OCTAL 1
 #define AUTOMATA_DECIMAL 2
 #define AUTOMATA_HEXADECIMAL 3
+
 int  cantPalabrasOctales = 0  ; 
 int  cantPalabrasHexadecimales = 0  ;
 int  cantPalabrasDecimales = 0  ;  
 int erroresLexicos=0 ; 
+
 #define ESTADO_ACEPTACION_OCTAL 2
 #define ESTADO_ACEPTACION_DECIMAL 2
 #define ESTADO_ACEPTACION_HEXADECIMAL 3
@@ -224,7 +226,7 @@ int transformarACol(char c){
 }
 
 
-
+//2 recibe
 int valorNumerico(char caracter)
 {
 	 int numero = -1;
@@ -281,6 +283,8 @@ int valorNumerico(char caracter)
 		 }
 	return numero;
 }
+
+
 
 
 int main()
