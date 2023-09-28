@@ -10,7 +10,7 @@ int  cantPalabrasHexadecimales = 0  ;
 int  cantPalabrasDecimales = 0  ;  
 #define ESTADO_ACEPTACION_OCTAL 2
 #define ESTADO_ACEPTACION_DECIMAL 2
-#define ESTADO_ACEPTACION_HEXADECIMAL 2
+#define ESTADO_ACEPTACION_HEXADECIMAL 3
 
 int verificarPalabraOctal(char *palabra) ; 
 int verificarPalabraHexadecimal(char *palabra) ; 
@@ -120,23 +120,26 @@ int verificarPalabra(char* palabra)
 int verificarPalabraOctal(char* palabra){
 	int estadoActual = 0;
 	int verificaPalabra = 0;
-	const int matrizOctal[4][3] = 
+	const int matrizOctal[4][2] = 
 	{
-		{'B','D','D'} , 
-		{'C','C' ,'D'}, 
-		{'C','C','D'} , 
-		{'D','D','D'}
+		{'B','D'} , 
+		{'C','C' }, 
+		{'C','C'} , 
+		{'D','D'}
 	};
-	 printf("%s \n" , "vo") ; 
+	 printf("verificar palabra octal llega la palabra%s \n" ,palabra) ; 
 	 fflush(stdout);
-	for(int i=0; i<palabra[i]; i++){
+	for(int i=0; i<strlen(palabra); i++){
 		char caracterActual = palabra[i];
-		estadoActual = estadoLetraAPosicion(matrizOctal[estadoActual][transformarAColOctal(estadoActual)]);
+		estadoActual = estadoLetraAPosicion(matrizOctal[estadoActual][transformarAColOctal(caracterActual)]);
+		printf("lueg de ejecturar caracter %c el  estado es %d \n",caracterActual , estadoActual) ; 
 	}
+	
 	if(estadoActual == ESTADO_ACEPTACION_OCTAL){
 		verificaPalabra = 1;
 		cantPalabrasOctales++;
 	}
+	printf("estado actual es %d \n" , estadoActual) ; 
 	return verificaPalabra;
 	
 }
@@ -144,18 +147,18 @@ int verificarPalabraOctal(char* palabra){
 int verificarPalabraDecimal(char* palabra){
 	int estadoActual = 0;
 	int verificaPalabra = 0;
-	const int matrizDecimal[4][5] = 
+	const int matrizDecimal[4][4] = 
 	{
-		{'C','B','B','D','D'} , 
-		{'D' ,'D','D','D','D'}, 
-		{'D','D','D','D'} , 
+		{'C','B','B','D',} , 
+		{'C' ,'D','D','C'}, 
+		{'C','D','D','C'} , 
 		{'D','D','D','D'}
 	};
 	 printf("%s \n" , "rd") ; 
 	 fflush(stdout);
-	for(int i=0; i<palabra[i]; i++){
+	for(int i=0; i<strlen(palabra); i++){
 		char caracterActual = palabra[i];
-		estadoActual = estadoLetraAPosicion(matrizDecimal[estadoActual][transformarAColOctal(caracterActual)]);
+		estadoActual = estadoLetraAPosicion(matrizDecimal[estadoActual][transformarAColDecimal(caracterActual)]);
 	}
 	if(estadoActual == ESTADO_ACEPTACION_DECIMAL){
 		verificaPalabra = 1;
@@ -169,17 +172,17 @@ int verificarPalabraHexadecimal(char* palabra){
 	int verificaPalabra = 0;
 	const int matrizHexadecimal[5][3] = 
 	{
-		{1,4,4} , 
-		{4,2,4}, 
-		{4,4,3} , 
-		{4,4,3} , 
-		{4,4,4}
+		{'B','E','E'} , 
+		{'E','C','E'}, 
+		{'E','E','D'} , 
+		{'E','E','D'} , 
+		{'E','E','E'}
 	};
 	 printf("%s \n" , "vhex") ; 
 	 fflush(stdout);
-	for(int i=0; i<palabra[i]; i++){
+	for(int i=0; i<strlen(palabra); i++){
 		char caracterActual = palabra[i];
-		estadoActual = estadoLetraAPosicion(matrizHexadecimal[estadoActual][caracterActual]);
+		estadoActual = estadoLetraAPosicion(matrizHexadecimal[estadoActual][transformarAColHexa(caracterActual)]);
 	}
 	if(estadoActual == ESTADO_ACEPTACION_HEXADECIMAL){
 		verificaPalabra = 1;
@@ -218,6 +221,7 @@ int estadoLetraAPosicion(char estado){
 int transformarAColOctal(char c){
 	int col = 0;
 	int valorNum = valorNumerico(c);
+	printf("valor numerico a devolver es %d y caracter es %c \n" , valorNum , c) ; 
 	if(valorNum!=-1 && valorNum < 8){
 		if(valorNum== 0){
 			col = 0;
@@ -229,6 +233,7 @@ int transformarAColOctal(char c){
 	else{
 		col = 2;
 	}
+	printf("la columna a devolver es %d \n" , col) ; 
 	return col;
 }
 
@@ -293,7 +298,7 @@ int valorNumerico(char caracter)
 
 int main()
 {
-   char cadena[100] ;  
+   /**/char cadena[100] ;  
   
 
     printf("Ingrese una cadena: ");
@@ -313,7 +318,7 @@ int main()
 	}
 	
 	
-	printf("verificarPalabraOctal es %d \n", verificarPalabraOctal("012")) ; 
+	printf("verificarPalabraOctal es %d \n", verificarPalabraOctal("012")) ;
 	
     
     
