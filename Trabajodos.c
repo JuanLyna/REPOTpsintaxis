@@ -8,6 +8,7 @@
 int  cantPalabrasOctales = 0  ; 
 int  cantPalabrasHexadecimales = 0  ;
 int  cantPalabrasDecimales = 0  ;  
+int erroresLexicos=0 ; 
 #define ESTADO_ACEPTACION_OCTAL 2
 #define ESTADO_ACEPTACION_DECIMAL 2
 #define ESTADO_ACEPTACION_HEXADECIMAL 3
@@ -19,52 +20,51 @@ int valorNumerico (char c ) ;
 int transformarACol(char c) ;
 int revisarHexa(char *cadena)
 {
-      int count  = 0 ; 
+      erroresLexicos  = 0 ; 
     for(int i = 0 ; cadena[i] ; i++)
     {
         if(cadena[i] != 'A' && cadena[i] != 'B'  && cadena[i] != 'C' && cadena[i] != 'D' && cadena[i] != 'E' && cadena[i] != 'F'  &&  isdigit(cadena[i])==0 && cadena[i] != 'x') // si alguno da true es que es un hexa 
     {
-       count ++ ;  
-    }else cantPalabrasHexadecimales++ ; 
+       erroresLexicos ++ ;  
+    }
     } 
-    printf("%s" , "rh") ; 
-	fflush(stdout);
-   return count  ; 
+   
+	
+   return erroresLexicos  ; 
 }
 
 int revisarOctal(char *cadena)
 {
-      int count  = 0 ; 
+      erroresLexicos  = 0 ; 
     
    for (int i = 0; cadena[i]; i++)
    {
      if(cadena[i] != '0'&&cadena[i] != '1'&&cadena[i] != '2'&&cadena[i] != '3'&&cadena[i] != '4'&&cadena[i] != '5'&&cadena[i] != '6'&&cadena[i] != '7') // si alguno da true es que es un hexa 
     {
-       count ++ ;  
-    } else cantPalabrasOctales++ ; 
+       erroresLexicos ++ ;  
+    } 
    }
-    printf("%s" , "ro") ; 
-	fflush(stdout);
-   return count ; 
+   
+   return erroresLexicos ; 
 }
 int revisarDecimal(char *cadena) 
 {   
-  int count = 0; 
+  erroresLexicos = 0; 
   for (int i = 0;cadena[i]; i++)
   {
-	 printf("caracter actual %c \n" ,cadena[i]) ; 
+	
     if(isdigit(cadena[i])==0 && cadena[i] != '-'&&cadena[i] != '+')
     {
-		printf("entre \n" ) ; 
-      count  ++ ; 
-    }else cantPalabrasDecimales++ ; 
+		
+      erroresLexicos  ++ ; 
+    }
   }
-   printf("%s" , "rd") ; 
-   fflush(stdout);
-  return count  ;
+  
+ 
+  return erroresLexicos  ;
 }
 int estadoLetraAPosicion(char estado) ; 
-int erroreslexicos  = 0 ; 
+
 
 
 int distinguirConstante(char* palabra){
@@ -80,10 +80,8 @@ int distinguirConstante(char* palabra){
 	else{
 		tipoAutomata = AUTOMATA_DECIMAL;
 	}
-	 printf("primera letra es  %c \n" , palabra[0]) ; 
-	  printf("segunda letra es %c \n" , palabra[1]) ;
-	   printf("tipo automata es %d \n " , tipoAutomata) ;
-	 fflush(stdout);
+	
+	
 	return tipoAutomata;
 }
 
@@ -92,7 +90,7 @@ int verificarPalabra(char* palabra)
 {
 	int palabraCorrecta = -1;
 	
-	 fflush(stdout);
+	 
 	switch (distinguirConstante(palabra))
 	{
 		case AUTOMATA_OCTAL:
@@ -123,19 +121,16 @@ int verificarPalabraOctal(char* palabra){
 		{'C','C'} , //C+
 		{'D','D'}  //D
 	};
-	 printf("verificar palabra octal llega la palabra%s \n" ,palabra) ; 
-	 fflush(stdout);
+	
 	for(int i=0; i<strlen(palabra); i++){
 		char caracterActual = palabra[i];
 		estadoActual = estadoLetraAPosicion(matrizOctal[estadoActual][transformarACol(caracterActual)]);
-		printf("lueg de ejecturar caracter %c el  estado es %d \n",caracterActual , estadoActual) ; 
 	}
 	
 	if(estadoActual == ESTADO_ACEPTACION_OCTAL){
 		verificaPalabra = 1;
 		cantPalabrasOctales++;
 	}
-	printf("estado actual es %d \n" , estadoActual) ; 
 	return verificaPalabra;
 	
 }
@@ -145,13 +140,12 @@ int verificarPalabraDecimal(char* palabra){
 	int verificaPalabra = 0;
 	const int matrizDecimal[4][4] = 
 	{// [0] [1-9]  +   - 
-		{'C','B','B','D',} , //A-
-		{'C' ,'D','D','C'},  //B
-		{'C','D','D','C'} ,  //C+
+		{'D','C','B','B',} , //A-
+		{'C' ,'C','D','D'},  //B
+		{'C','C','D','D'} ,  //C+
 		{'D','D','D','D'} // D
 	};
-	 printf("%s \n" , "rd") ; 
-	 fflush(stdout);
+
 	for(int i=0; i<strlen(palabra); i++){
 		char caracterActual = palabra[i];
 		estadoActual = estadoLetraAPosicion(matrizDecimal[estadoActual][transformarACol(caracterActual)]);
@@ -169,13 +163,12 @@ int verificarPalabraHexadecimal(char* palabra){
 	const int matrizHexadecimal[5][3] = 
 	{//   0  1-F  X
 		{'B','E','E'} , //A-
-		{'E','C','E'}, //B
-		{'E','E','D'} ,  //C
-		{'E','E','D'} , //D+
+		{'E','E','C'}, //B
+		{'E','D','E'} ,  //C
+		{'E','D','E'} , //D+
 		{'E','E','E'} //E
 	};
-	 printf("%s \n" , "vhex") ; 
-	 fflush(stdout);
+	 
 	for(int i=0; i<strlen(palabra); i++){
 		char caracterActual = palabra[i];
 		estadoActual = estadoLetraAPosicion(matrizHexadecimal[estadoActual][transformarACol(caracterActual)]);
@@ -214,28 +207,10 @@ int estadoLetraAPosicion(char estado){
 	}
 	return numCol;
 }
-int transformarAColOctal(char c){
-	int col = 0;
-	int valorNum = valorNumerico(c);
-	printf("valor numerico a devolver es %d y caracter es %c \n" , valorNum , c) ; 
-	if(valorNum!=-1 && valorNum < 8){
-		if(valorNum== 0){
-			col = 0;
-		}
-		else{
-			col = 1;
-		}
-	}
-	else{
-		col = 2;
-	}
-	printf("la columna a devolver es %d \n" , col) ; 
-	return col;
-}
+
 int transformarACol(char c){
 	int col = 0;
 	int valorNum = valorNumerico(c);
-	printf("valor numerico a devolver es %d y caracter es %c \n" , valorNum , c) ;
 	if(valorNum== 0){
 		col = 0;
 	}
@@ -245,7 +220,6 @@ int transformarACol(char c){
 	else{
 		col = 2;
 	}
-	printf("la columna a devolver es %d \n" , col) ;
 	return col;
 }
 
@@ -322,16 +296,39 @@ int main()
     
 	while (grupoPalabra!=NULL)
 	{	
-		printf("%s \n", grupoPalabra);
-		 printf("verificar palabra ");
-		verificarPalabra(grupoPalabra) ; 
+		
+		 if(distinguirConstante(grupoPalabra)==AUTOMATA_OCTAL)
+		 {
+			revisarOctal(grupoPalabra) ; 
+			printf("Los errores lexicos de Octal han sido %d \n" , erroresLexicos) ; 
+			
+		 } else if (distinguirConstante(grupoPalabra)==AUTOMATA_DECIMAL)
+		 {
+			revisarDecimal(grupoPalabra) ; 
+			printf("Los errores lexicos de Decimal han sido %d \n" , erroresLexicos) ; 
+		 } else if (distinguirConstante(grupoPalabra)==AUTOMATA_HEXADECIMAL) 
+		 {
+			 revisarHexa(grupoPalabra) ; 
+			printf("Los errores lexicos de HexaDecimal han sido %d \n" , erroresLexicos) ; 
+		 }
+		 
+		if(erroresLexicos==0)
+			{
+				verificarPalabra(grupoPalabra) ;
+
+			}  else printf("no es posible analizar la cadena porque no pertenece al alfabeto \n") ; 
+
  	
 		grupoPalabra = strtok(NULL , "$") ; 
 		 
 	}
 	
+	printf("Cantidad de palabras correctas Decimales %d \n" , cantPalabrasDecimales) ;
+	printf("Cantidad de palabras correctas  Octales %d \n" , cantPalabrasOctales) ;
+
+	printf("Cantidad de palabras correctas Hexadecimales %d \n" , cantPalabrasHexadecimales) ;
+
 	
-	printf("verificarPalabraOctal es %d \n", verificarPalabraOctal("012")) ;
 	
     
     
