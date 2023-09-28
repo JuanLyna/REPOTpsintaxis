@@ -16,7 +16,7 @@ int verificarPalabraOctal(char *palabra) ;
 int verificarPalabraHexadecimal(char *palabra) ; 
 int verificarPalabraDecimal(char *palabra) ; 
 int valorNumerico (char c ) ; 
-int transformarAColOctal (char c) ; 
+int transformarACol(char c) ;
 int revisarHexa(char *cadena)
 {
       int count  = 0 ; 
@@ -127,7 +127,7 @@ int verificarPalabraOctal(char* palabra){
 	 fflush(stdout);
 	for(int i=0; i<strlen(palabra); i++){
 		char caracterActual = palabra[i];
-		estadoActual = estadoLetraAPosicion(matrizOctal[estadoActual][transformarAColOctal(caracterActual)]);
+		estadoActual = estadoLetraAPosicion(matrizOctal[estadoActual][transformarACol(caracterActual)]);
 		printf("lueg de ejecturar caracter %c el  estado es %d \n",caracterActual , estadoActual) ; 
 	}
 	
@@ -154,7 +154,7 @@ int verificarPalabraDecimal(char* palabra){
 	 fflush(stdout);
 	for(int i=0; i<strlen(palabra); i++){
 		char caracterActual = palabra[i];
-		estadoActual = estadoLetraAPosicion(matrizDecimal[estadoActual][transformarAColDecimal(caracterActual)]);
+		estadoActual = estadoLetraAPosicion(matrizDecimal[estadoActual][transformarACol(caracterActual)]);
 	}
 	if(estadoActual == ESTADO_ACEPTACION_DECIMAL){
 		verificaPalabra = 1;
@@ -178,7 +178,7 @@ int verificarPalabraHexadecimal(char* palabra){
 	 fflush(stdout);
 	for(int i=0; i<strlen(palabra); i++){
 		char caracterActual = palabra[i];
-		estadoActual = estadoLetraAPosicion(matrizHexadecimal[estadoActual][transformarAColHexa(caracterActual)]);
+		estadoActual = estadoLetraAPosicion(matrizHexadecimal[estadoActual][transformarACol(caracterActual)]);
 	}
 	if(estadoActual == ESTADO_ACEPTACION_HEXADECIMAL){
 		verificaPalabra = 1;
@@ -232,6 +232,23 @@ int transformarAColOctal(char c){
 	printf("la columna a devolver es %d \n" , col) ; 
 	return col;
 }
+int transformarACol(char c){
+	int col = 0;
+	int valorNum = valorNumerico(c);
+	printf("valor numerico a devolver es %d y caracter es %c \n" , valorNum , c) ;
+	if(valorNum== 0){
+		col = 0;
+	}
+	else if (valorNum > 0){
+		col = 1;
+	}
+	else{
+		col = 2;
+	}
+	printf("la columna a devolver es %d \n" , col) ;
+	return col;
+}
+
 
 
 int valorNumerico(char caracter)
