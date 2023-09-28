@@ -15,13 +15,14 @@ int  cantPalabrasDecimales = 0  ;
 int verificarPalabraOctal(char *palabra) ; 
 int verificarPalabraHexadecimal(char *palabra) ; 
 int verificarPalabraDecimal(char *palabra) ; 
-
+int valorNumerico (char c ) ; 
+int transformarAColOctal (char c) ; 
 int revisarHexa(char *cadena)
 {
       int count  = 0 ; 
     for(int i = 0 ; cadena[i] ; i++)
     {
-        if(cadena[i] != 'A' && cadena[i] != 'B'  && cadena[i] != 'C' && cadena[i] != 'D' && cadena[i] != 'E' && cadena[i] != 'F'  &&  isdigit(cadena[i])!=0) // si alguno da true es que es un hexa 
+        if(cadena[i] != 'A' && cadena[i] != 'B'  && cadena[i] != 'C' && cadena[i] != 'D' && cadena[i] != 'E' && cadena[i] != 'F'  &&  isdigit(cadena[i])==0 && cadena[i] != 'x') // si alguno da true es que es un hexa 
     {
        count ++ ;  
     }
@@ -51,8 +52,10 @@ int revisarDecimal(char *cadena)
   int count = 0; 
   for (int i = 0;cadena[i]; i++)
   {
-    if(isdigit(cadena[i])!=0 && cadena[i] != '-'&&cadena[i] != '+')
+	 printf("caracter actual %c \n" ,cadena[i]) ; 
+    if(isdigit(cadena[i])==0 && cadena[i] != '-'&&cadena[i] != '+')
     {
+		printf("entre \n" ) ; 
       count  ++ ; 
     }
   }
@@ -60,7 +63,7 @@ int revisarDecimal(char *cadena)
    fflush(stdout);
   return count  ;
 }
-int estadoLetraAEstadoANum(char estado) ; 
+int estadoLetraAPosicion(char estado) ; 
 int erroreslexicos  = 0 ; 
 
 
@@ -88,7 +91,7 @@ int distinguirConstante(char* palabra){
 int verificarPalabra(char* palabra)
 {
 	int palabraCorrecta = -1;
-	 printf("%s \n" , "vp") ; 
+	
 	 fflush(stdout);
 	switch (distinguirConstante(palabra))
 	{
@@ -117,18 +120,18 @@ int verificarPalabra(char* palabra)
 int verificarPalabraOctal(char* palabra){
 	int estadoActual = 0;
 	int verificaPalabra = 0;
-	const int matrizOctal[4][2] = 
+	const int matrizOctal[4][3] = 
 	{
-		{1,3} , 
-		{3,1 }, 
-		{3,2} , 
-		{3,3}
+		{'B','D','D'} , 
+		{'C','C' ,'D'}, 
+		{'C','C','D'} , 
+		{'D','D','D'}
 	};
 	 printf("%s \n" , "vo") ; 
 	 fflush(stdout);
 	for(int i=0; i<palabra[i]; i++){
 		char caracterActual = palabra[i];
-		estadoActual = estadoLetraAEstadoANum(matrizOctal[estadoActual][caracterActual]);
+		estadoActual = estadoLetraAPosicion(matrizOctal[estadoActual][transformarAColOctal(estadoActual)]);
 	}
 	if(estadoActual == ESTADO_ACEPTACION_OCTAL){
 		verificaPalabra = 1;
@@ -141,18 +144,18 @@ int verificarPalabraOctal(char* palabra){
 int verificarPalabraDecimal(char* palabra){
 	int estadoActual = 0;
 	int verificaPalabra = 0;
-	const int matrizDecimal[4][4] = 
+	const int matrizDecimal[4][5] = 
 	{
-		{2,1,1,3} , 
-		{3 ,3,3,2}, 
-		{3,3,3,2} , 
-		{3,3,3,3}
+		{'C','B','B','D','D'} , 
+		{'D' ,'D','D','D','D'}, 
+		{'D','D','D','D'} , 
+		{'D','D','D','D'}
 	};
 	 printf("%s \n" , "rd") ; 
 	 fflush(stdout);
 	for(int i=0; i<palabra[i]; i++){
 		char caracterActual = palabra[i];
-		estadoActual = estadoLetraAEstadoANum(matrizDecimal[estadoActual][caracterActual]);
+		estadoActual = estadoLetraAPosicion(matrizDecimal[estadoActual][transformarAColOctal(caracterActual)]);
 	}
 	if(estadoActual == ESTADO_ACEPTACION_DECIMAL){
 		verificaPalabra = 1;
@@ -176,7 +179,7 @@ int verificarPalabraHexadecimal(char* palabra){
 	 fflush(stdout);
 	for(int i=0; i<palabra[i]; i++){
 		char caracterActual = palabra[i];
-		estadoActual = estadoLetraAEstadoANum(matrizHexadecimal[estadoActual][caracterActual]);
+		estadoActual = estadoLetraAPosicion(matrizHexadecimal[estadoActual][caracterActual]);
 	}
 	if(estadoActual == ESTADO_ACEPTACION_HEXADECIMAL){
 		verificaPalabra = 1;
@@ -185,7 +188,7 @@ int verificarPalabraHexadecimal(char* palabra){
 	return verificaPalabra;
 }
 
-int estadoLetraAEstadoANum(char estado){
+int estadoLetraAPosicion(char estado){
 	int numCol = -1;
 	switch(estado){
 		case 'A':
@@ -212,16 +215,87 @@ int estadoLetraAEstadoANum(char estado){
 	}
 	return numCol;
 }
+int transformarAColOctal(char c){
+	int col = 0;
+	int valorNum = valorNumerico(c);
+	if(valorNum!=-1 && valorNum < 8){
+		if(valorNum== 0){
+			col = 0;
+		}
+		else{
+			col = 1;
+		}
+	}
+	else{
+		col = 2;
+	}
+	return col;
+}
 
+
+int valorNumerico(char caracter)
+{
+	 int numero = -1;
+	switch (caracter)
+{
+		 case '0':
+			numero = 0;
+			 break;
+		 case '1':
+		 numero = 1;
+		 break;
+		 case '2':
+		numero = 2;
+		break;
+		 case '3':
+		 numero = 3;
+		break;
+		case '4':
+		 numero = 4;
+		break;
+		case '5':
+			numero = 5;
+		 break;
+		 case '6':
+			 numero = 6;
+			 break;
+		 case '7':
+			numero = 7;
+			break;
+		 case '8':
+			 numero = 8;
+		 break;
+		 case '9':
+		numero = 9;
+			 break;
+		 case 'A':
+		numero = 10;
+		 break;
+		case 'B':
+		numero = 11;
+		 break;
+	 	 case 'C':
+ 		 numero = 12;
+		 break;
+		 case 'D':
+		 numero = 13;
+		break;
+		 case 'E':
+		 numero = 14;
+		break;
+		 case 'F':
+		numero = 15;
+	 break;
+		 }
+	return numero;
+}
 
 
 int main()
 {
    char cadena[100] ;  
   
-   char cadenaUnida [102]; 
-   int constante = 0 ;  
-  
+
     printf("Ingrese una cadena: ");
 	fflush(stdout);
     scanf( " %s",&cadena) ; 
@@ -239,7 +313,7 @@ int main()
 	}
 	
 	
-	
+	printf("verificarPalabraOctal es %d \n", verificarPalabraOctal("012")) ; 
 	
     
     
