@@ -25,8 +25,8 @@ int revisarHexa(char *cadena)
         if(cadena[i] != 'A' && cadena[i] != 'B'  && cadena[i] != 'C' && cadena[i] != 'D' && cadena[i] != 'E' && cadena[i] != 'F'  &&  isdigit(cadena[i])==0 && cadena[i] != 'x') // si alguno da true es que es un hexa 
     {
        count ++ ;  
-    }
-    }
+    }else cantPalabrasHexadecimales++ ; 
+    } 
     printf("%s" , "rh") ; 
 	fflush(stdout);
    return count  ; 
@@ -41,7 +41,7 @@ int revisarOctal(char *cadena)
      if(cadena[i] != '0'&&cadena[i] != '1'&&cadena[i] != '2'&&cadena[i] != '3'&&cadena[i] != '4'&&cadena[i] != '5'&&cadena[i] != '6'&&cadena[i] != '7') // si alguno da true es que es un hexa 
     {
        count ++ ;  
-    }
+    } else cantPalabrasOctales++ ; 
    }
     printf("%s" , "ro") ; 
 	fflush(stdout);
@@ -57,7 +57,7 @@ int revisarDecimal(char *cadena)
     {
 		printf("entre \n" ) ; 
       count  ++ ; 
-    }
+    }else cantPalabrasDecimales++ ; 
   }
    printf("%s" , "rd") ; 
    fflush(stdout);
@@ -96,20 +96,16 @@ int verificarPalabra(char* palabra)
 	switch (distinguirConstante(palabra))
 	{
 		case AUTOMATA_OCTAL:
-			printf("Los errores lexicos en octal han sido %d \n" , revisarOctal(palabra));
 			
-			fflush(stdout);
 			palabraCorrecta = verificarPalabraOctal(palabra);
 			
 			break;
 		case AUTOMATA_DECIMAL:
-			printf("Los errores lexicos en decimal han sido %d \n" , revisarDecimal(palabra));
-			fflush(stdout);
+			
 			palabraCorrecta = verificarPalabraDecimal(palabra);
 			break;
 		case AUTOMATA_HEXADECIMAL:
-			printf("Los errores lexicos en Hexadecimal han sido %d \n" , revisarHexa(palabra));
-			fflush(stdout);
+			
 			palabraCorrecta = verificarPalabraHexadecimal(palabra);
 			break;
 		default:
@@ -121,11 +117,11 @@ int verificarPalabraOctal(char* palabra){
 	int estadoActual = 0;
 	int verificaPalabra = 0;
 	const int matrizOctal[4][2] = 
-	{
-		{'B','D'} , 
-		{'C','C' }, 
-		{'C','C'} , 
-		{'D','D'}
+	{  // 0   0-7
+		{'B','D'} , //A-
+		{'C','C' }, //B
+		{'C','C'} , //C+
+		{'D','D'}  //D
 	};
 	 printf("verificar palabra octal llega la palabra%s \n" ,palabra) ; 
 	 fflush(stdout);
@@ -148,11 +144,11 @@ int verificarPalabraDecimal(char* palabra){
 	int estadoActual = 0;
 	int verificaPalabra = 0;
 	const int matrizDecimal[4][4] = 
-	{
-		{'C','B','B','D',} , 
-		{'C' ,'D','D','C'}, 
-		{'C','D','D','C'} , 
-		{'D','D','D','D'}
+	{// [0] [1-9]  +   - 
+		{'C','B','B','D',} , //A-
+		{'C' ,'D','D','C'},  //B
+		{'C','D','D','C'} ,  //C+
+		{'D','D','D','D'} // D
 	};
 	 printf("%s \n" , "rd") ; 
 	 fflush(stdout);
@@ -171,12 +167,12 @@ int verificarPalabraHexadecimal(char* palabra){
 	int estadoActual = 0;
 	int verificaPalabra = 0;
 	const int matrizHexadecimal[5][3] = 
-	{
-		{'B','E','E'} , 
-		{'E','C','E'}, 
-		{'E','E','D'} , 
-		{'E','E','D'} , 
-		{'E','E','E'}
+	{//   0  1-F  X
+		{'B','E','E'} , //A-
+		{'E','C','E'}, //B
+		{'E','E','D'} ,  //C
+		{'E','E','D'} , //D+
+		{'E','E','E'} //E
 	};
 	 printf("%s \n" , "vhex") ; 
 	 fflush(stdout);
